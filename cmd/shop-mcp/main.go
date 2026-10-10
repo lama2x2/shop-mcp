@@ -134,7 +134,7 @@ func resolveDBPath(flagPath string) (string, error) {
 		}
 	}
 	for _, c := range candidates {
-		info, err := os.Stat(c)
+		info, err := os.Stat(c) //nolint:gosec // operator-supplied path is the point of --db
 		if err != nil || info.IsDir() {
 			continue
 		}

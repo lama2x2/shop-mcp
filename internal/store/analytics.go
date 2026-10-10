@@ -74,6 +74,7 @@ func (s *Store) CustomerStats(ctx context.Context, f Filter, by string) ([]Custo
 	if err != nil {
 		return nil, err
 	}
+	//nolint:gosec // only static fragments and ? placeholders are concatenated
 	q := `SELECT c.id, c.first_name, c.last_name, c.email,
        ` + revenueExpr + ` AS total_spent,
        COUNT(DISTINCT o.id) AS order_count` + itemsJoin + `
@@ -124,6 +125,7 @@ func (s *Store) ProductStats(ctx context.Context, f Filter, by string) ([]Produc
 	if err != nil {
 		return nil, err
 	}
+	//nolint:gosec // only static fragments and ? placeholders are concatenated
 	q := `SELECT p.id, p.name, p.category,
        SUM(oi.quantity) AS units_sold,
        ` + revenueExpr + ` AS revenue` + itemsJoin + where + `
@@ -196,7 +198,7 @@ func (s *Store) RevenueGroups(ctx context.Context, f Filter, groupBy string) ([]
 	if err != nil {
 		return nil, err
 	}
-	q := "SELECT " + g.key + ", " + totalsCols + itemsJoin + where + " GROUP BY 1 ORDER BY " + g.order
+	q := "SELECT " + g.key + ", " + totalsCols + itemsJoin + where + " GROUP BY 1 ORDER BY " + g.order //nolint:gosec // static fragments only
 	rows, err := s.db.QueryContext(ctx, q, args...)
 	if err != nil {
 		return nil, wrapCtx(ctx, "revenue groups", err)
