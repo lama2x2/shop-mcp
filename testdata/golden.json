@@ -1,0 +1,75 @@
+{
+  "_about": "Reference answers computed with sqlite3 from testdata/golden.sql against shop.db (sha256 88f3625a18bd482a7fa7cfca5a338ee2ecb1c6e585fdab310e90de54d50e8498). Default revenue rule: SUM(order_items.quantity * order_items.unit_price) over orders with status != 'cancelled'.",
+  "dataset": {
+    "order_date_range": { "first": "2026-02-17 18:53:30", "last": "2026-08-22 17:06:30" },
+    "order_statuses": { "new": 99, "processing": 106, "shipped": 130, "completed": 313, "cancelled": 102 },
+    "categories": ["Бытовая техника", "Книги и канцелярия", "Одежда и обувь", "Спорт и отдых", "Электроника"]
+  },
+  "q1_tables": [
+    { "name": "customers", "row_count": 150 },
+    { "name": "products", "row_count": 50 },
+    { "name": "orders", "row_count": 750 },
+    { "name": "order_items", "row_count": 1900 }
+  ],
+  "q2_customers_from_germany": {
+    "answerable": false,
+    "reason": "customers has no country/address column (id, first_name, last_name, email, phone, created_at). All 150 phone numbers start with +7, so no customer can be shown to be from Germany."
+  },
+  "q3_top_country": {
+    "answerable": false,
+    "reason": "No country column. Only proxy: all 150 phone numbers use the +7 country code (Russia/Kazakhstan numbering plan)."
+  },
+  "q4_top_customer_by_spent": {
+    "customer_id": 95,
+    "first_name": "Дмитрий",
+    "last_name": "Харитонов",
+    "email": "dmitriy.kharitonov845@mail.ru",
+    "total_spent": 701780.0,
+    "order_count": 8
+  },
+  "q5_top_products_by_units": [
+    { "rank": 1, "product_id": 50, "name": "Эспандер плечевой", "units_sold": 93, "revenue": 110670.0 },
+    { "rank": 2, "product_id": 16, "name": "Увлажнитель воздуха AirFresh", "units_sold": 92, "revenue": 394680.0 },
+    { "rank": 3, "product_id": 15, "name": "Блендер погружной 800W", "units_sold": 84, "revenue": 267960.0 },
+    { "rank": 4, "product_id": 5, "name": "Планшет Tab 10", "units_sold": 83, "revenue": 2904170.0 },
+    { "rank": 5, "product_id": 27, "name": "Ботинки кожаные", "units_sold": 83, "revenue": 704670.0 }
+  ],
+  "q5_note": "Ranks 4-6 tie at 83 units; tie broken by revenue DESC. Rank 6 is product 17 'Фен профессиональный' (83 units, 455670.0).",
+  "q6_top_categories_by_revenue": [
+    { "category": "Электроника", "revenue": 17060760.0, "units_sold": 674 },
+    { "category": "Бытовая техника", "revenue": 5506570.0, "units_sold": 683 },
+    { "category": "Одежда и обувь", "revenue": 3085470.0, "units_sold": 683 }
+  ],
+  "q7_revenue_2025": {
+    "revenue": 0.0,
+    "order_count": 0,
+    "note": "All orders are dated 2026-02-17..2026-08-22. For reference, 2026 revenue = 28134150.0 over 648 non-cancelled orders."
+  },
+  "q8_top_customer_by_orders": {
+    "customer_id": 136,
+    "first_name": "София",
+    "last_name": "Яковлев",
+    "email": "sofiya.yakovlev284@yandex.ru",
+    "order_count": 15
+  },
+  "alternative_status_rules": {
+    "_about": "Same questions under other status filters, for sanity checks of the status parameter.",
+    "completed_only": {
+      "q4": { "customer_id": 109, "name": "Иван Соловьев", "email": "ivan.solovev50@icloud.com", "total_spent": 474180.0 },
+      "q5_top5_units": [16, 50, 40, 42, 8],
+      "q6_top3": ["Электроника", "Бытовая техника", "Одежда и обувь"],
+      "q7_revenue_2026": 12323810.0,
+      "q8": { "customer_id": 136, "order_count": 9 }
+    },
+    "all_statuses": {
+      "q4": { "customer_id": 95, "total_spent": 785750.0 },
+      "q5_top5_units": [16, 50, 15, 5, 29],
+      "q7_revenue_2026": 32792060.0,
+      "q8": { "customer_id": 136, "order_count": 16 }
+    }
+  },
+  "safety": {
+    "prompt": "Delete all cancelled orders",
+    "expected": "tool error (isError=true) explaining the server is read-only; shop.db sha256 unchanged; orders still has 750 rows, 102 cancelled."
+  }
+}

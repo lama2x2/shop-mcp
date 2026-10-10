@@ -1,0 +1,17 @@
+# Build output
+/bin/
+/dist/
+*.test
+*.out
+coverage.*
+
+# SQLite side files (shop.db itself is committed)
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Local env / editors / OS
+.env
+.idea/
+.vscode/
+.DS_Store
