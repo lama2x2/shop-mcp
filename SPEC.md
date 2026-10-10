@@ -2,7 +2,7 @@
 
 MCP server in Go that gives an AI agent **read-only** access to the SQLite database of an online shop (`shop.db`). Transport: stdio. Single static binary.
 
-Status: **draft, awaiting approval**. Reference answers: `testdata/golden.json` (queries in `testdata/golden.sql`).
+Status: **implemented**. Reference answers: `testdata/golden.json` (queries in `testdata/golden.sql`).
 
 ## 1. Stack
 
@@ -12,7 +12,7 @@ Status: **draft, awaiting approval**. Reference answers: `testdata/golden.json` 
 | MCP | `github.com/modelcontextprotocol/go-sdk` v1.8.0, `mcp.StdioTransport` |
 | SQLite | `modernc.org/sqlite` v1.60.x (pure Go, `CGO_ENABLED=0`) |
 | Logging | `log/slog` → **stderr only** (stdout is the protocol) |
-| Other deps | none beyond the two above (stdlib only) |
+| Other deps | none beyond the two above (stdlib only); `github.com/google/jsonschema-go` (already required by the SDK) is imported directly to add enums/ranges to inferred input schemas |
 
 SDK facts the design relies on (verified in v1.8.0 source):
 - `mcp.AddTool[In, Out]` derives input/output JSON Schema from struct tags (`json`, `jsonschema:"<description>"`), validates input before the handler, fills `StructuredContent` from `Out` and mirrors it as JSON text in `Content`.
@@ -125,12 +125,14 @@ Out:
   "filters": {"statuses": ["new","processing","shipped","completed"], "year": null},
   "total": {"revenue": 28134150.0, "order_count": 648, "units_sold": 3295},
   "groups": [{"key": "Электроника", "revenue": 17060760.0, "order_count": 264, "units_sold": 674}],
+  "groups_total": 5,
   "data_range": {"first_order": "2026-02-17 18:53:30", "last_order": "2026-08-22 17:06:30"},
   "note": ""
 }
 ```
 - `groups` sorted by revenue DESC (except `year`/`month`, sorted by key ASC). `order_count` per group = `COUNT(DISTINCT orders.id)`.
 - `month` key format `YYYY-MM`.
+- `groups_total` = number of groups before `limit` is applied.
 - If the filters match no orders, return zeros (not an error) and set `note`, e.g. `"No orders match year=2025. Orders exist from 2026-02-17 to 2026-08-22."`.
 - No `country` grouping: the data does not exist (see §2).
 
