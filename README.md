@@ -58,6 +58,8 @@ claude mcp add shop -- /abs/path/shop-mcp/bin/shop-mcp --db /abs/path/shop-mcp/s
 
 or put [`examples/claude-code.mcp.json`](examples/claude-code.mcp.json) into the project as `.mcp.json` ([`go run` variant](examples/claude-code-go-run.mcp.json)).
 
+This repository already has a project-scoped [`.mcp.json`](.mcp.json) that runs the server with `go run ./cmd/shop-mcp --db shop.db`. Open Claude Code in the repo root and approve the `shop` server when prompted.
+
 **Claude Desktop**: merge [`examples/claude_desktop_config.json`](examples/claude_desktop_config.json) into `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) and restart the app.
 
 **Cursor**: merge [`examples/cursor-mcp.json`](examples/cursor-mcp.json) into `~/.cursor/mcp.json` or `.cursor/mcp.json` in a project.
