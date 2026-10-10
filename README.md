@@ -183,6 +183,8 @@ Refused: this server provides read-only access. DELETE statements are not allowe
 
 The SHA-256 of `shop.db` was `88f3625a…e8498` both before and after the session.
 
+For a live agent run, see [docs/live-session.md](docs/live-session.md). It is the transcript of a Claude Code session that answers the same questions in Russian through the project `.mcp.json`. It shows the tools the agent picked, the tool results, the final answers, a comparison with `testdata/golden.json`, and the rough edges found along the way.
+
 ## Development
 
 ```bash
