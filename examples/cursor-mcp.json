@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "shop": {
+      "command": "/ABS/PATH/TO/shop-mcp/bin/shop-mcp",
+      "args": ["--db", "/ABS/PATH/TO/shop-mcp/shop.db"],
+      "env": {}
+    }
+  }
+}

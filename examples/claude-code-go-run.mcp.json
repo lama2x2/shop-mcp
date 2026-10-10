@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "shop": {
+      "type": "stdio",
+      "command": "go",
+      "args": ["run", "/ABS/PATH/TO/shop-mcp/cmd/shop-mcp", "--db", "/ABS/PATH/TO/shop-mcp/shop.db"]
+    }
+  }
+}
